@@ -8,7 +8,7 @@ from time import sleep
 
 def usage():
   print '''
-Usage: %s [start] [stop] [show]
+Usage: %s [--start] [--stop] [--show]
 
 Exiting...
 ''' % (sys.argv[0])
