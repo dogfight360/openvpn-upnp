@@ -24,8 +24,8 @@ miniupnpc:
 .PHONY: rpm
 
 rpm: /usr/bin/rpmbuild build
-	(python setup.py bdist_rpm --dist-dir=rpm)
-	(cd miniupnpc; python setup.py bdist_rpm --dist-dir=rpm)
+	(mkdir -p rpm; python setup.py bdist_rpm --dist-dir=rpm)
+	(cd miniupnpc; mkdir -p rpm; python setup.py bdist_rpm --dist-dir=rpm)
 
 irpm:
 	(sudo rpm -i rpm/*.noarch.rpm)
