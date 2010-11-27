@@ -1,10 +1,15 @@
-all:
+all: build
+
+build: miniupnpc
 
 # dont forget to install python-all-dev
 
-deb: /usr/share/pyshared/stdeb
+deb: /usr/share/pyshared/stdeb build
 	(python setup.py --command-packages=stdeb.command bdist_deb)
 	(cd miniupnpc; python setup.py --command-packages=stdeb.command bdist_deb)
+
+/usr/share/pyshared/stdeb:
+	(sudo apt-get install python-stdeb)
 
 ideb:
 	(sudo dpkg -i deb_dist/*.deb)
@@ -15,10 +20,7 @@ ideb:
 miniupnpc:
 	(make -C miniupnpc pythonmodule)
 
-/usr/share/pyshared/stdeb:
-	(sudo apt-get install python-stdeb)
-
-rpm: /usr/bin/rpmbuild
+rpm: /usr/bin/rpmbuild build
 	(./setup.py bdist --format=rpm --dist-dir=rpm)
 
 /usr/bin/rpmbuild:
