@@ -29,7 +29,7 @@ rpm: /usr/bin/rpmbuild build
 
 irpm:
 	(sudo rpm -i rpm/*.noarch.rpm)
-	(sudo rpm -i rpm/*.noarch.rpm)
+	(sudo rpm -i miniupnpc/rpm/*.i686.rpm)
 
 /usr/bin/rpmbuild:
 	(sudo yum install -y rpmdevtools)
