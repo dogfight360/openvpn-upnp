@@ -28,8 +28,8 @@ rpm: /usr/bin/rpmbuild build
 	(cd miniupnpc; mkdir -p rpm; python setup.py bdist_rpm --dist-dir=rpm)
 
 irpm:
-	(sudo rpm -i rpm/*.noarch.rpm)
-	(sudo rpm -i miniupnpc/rpm/*.i686.rpm)
+	(sudo rpm -U --force rpm/*.noarch.rpm)
+	(sudo rpm -U --force miniupnpc/rpm/*.i686.rpm)
 
 /usr/bin/rpmbuild:
 	(sudo yum install -y rpmdevtools)
