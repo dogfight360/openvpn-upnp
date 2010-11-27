@@ -18,10 +18,18 @@ ideb:
 .PHONY: miniupnpc
 
 miniupnpc:
+	(make -C miniupnpc)
 	(make -C miniupnpc pythonmodule)
 
+.PHONY: rpm
+
 rpm: /usr/bin/rpmbuild build
-	(./setup.py bdist --format=rpm --dist-dir=rpm)
+	(python setup.py bdist_rpm --dist-dir=rpm)
+	(cd miniupnpc; python setup.py bdist_rpm --dist-dir=rpm)
+
+irpm:
+	(sudo rpm -i rpm/*.noarch.rpm)
+	(sudo rpm -i rpm/*.noarch.rpm)
 
 /usr/bin/rpmbuild:
 	(sudo yum install -y rpmdevtools)
