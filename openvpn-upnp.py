@@ -1,34 +1,45 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 
 import miniupnpc
 import sys
+import getopt
 
 from time import sleep
 
 def usage():
   print '''
-Usage: %s [start] [stop]
+Usage: %s [start] [stop] [show]
 
 Exiting...
 ''' % (sys.argv[0])
 
 def args():
-    if len(sys.argv[1:]):
-        try:
-            (opts, args) = getopt.getopt(sys.argv[1:], '', ['start','stop'])
-            if (len(args)): raise getopt.GetoptError('bad parameter')
+  action = ''
 
-        except getopt.GetoptError:
-            usage()
-            sys.exit(0)
+  if len(sys.argv[1:]):
+    try:
+      (opts, args) = getopt.getopt(sys.argv[1:], '', ['start','stop','show'])
+      if (len(args)): raise getopt.GetoptError('bad parameter')
 
-        for (opt, arg) in opts:
-            if opt in ('-k', '--key'):
-                key = arg
-            elif opt in ('-s', '--secret'):
-                secret = arg
+    except getopt.GetoptError:
+      usage()
+      sys.exit(0)
 
-def show(u):
+    for (opt, arg) in opts:
+      if opt in ('--start'):
+        action = 'START'
+      elif opt in ('--stop'):
+        action = 'STOP'
+      elif opt in ('--show'):
+        action = 'SHOW'
+  else:
+    usage()
+    sys.exit(0)
+
+  return action
+
+def show():
+  u = init()
   port = 0
   proto = 'UDP'
   # list the redirections :
@@ -44,13 +55,29 @@ def show(u):
 
   print u.getspecificportmapping(port, proto)
 
-def start(u):
+def run():
+  while True:
+    start()
+    sleep(60 * 60) # each hour
+
+def start():
+  u = init()
   print u.addportmapping(1194, 'TCP', u.lanaddr, 1194, 'OpenVPN-UPNP plugin', '')
 
-def stop(u):
+def stop():
+  u = init()
   print u.deleteportmapping(1194, 'TCP')
 
 def main():
+  action = args()
+
+  {
+    'START' : run,
+    'STOP' : stop,
+    'SHOW' : show,
+  }[action]()
+
+def init():
   u = miniupnpc.UPnP()
   u.discoverdelay = 200;
   print u.discover()
@@ -64,9 +91,7 @@ def main():
   print 'external ip address :', u.externalipaddress()
   print u.statusinfo(), u.connectiontype()
 
-  while True:
-    start(u)
-    sleep(60 * 60) # each hour
+  return u
 
 if __name__ == "__main__":
     main()
