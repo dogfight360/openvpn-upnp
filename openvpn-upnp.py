@@ -57,8 +57,12 @@ def show():
 
 def run():
   while True:
+    try:
+      stop()
+    except:
+      pass
     start()
-    sleep(60 * 60) # each hour
+    sleep(10 * 60) # each 10 min
 
 def start():
   u = init()
