@@ -8,8 +8,11 @@ deb: /usr/share/pyshared/stdeb build
 	(python setup.py --command-packages=stdeb.command bdist_deb)
 	(cd miniupnpc; python setup.py --command-packages=stdeb.command bdist_deb)
 
-/usr/share/pyshared/stdeb:
+/usr/share/pyshared/stdeb: /usr/share/doc/python-all-dev
 	(sudo apt-get install python-stdeb)
+
+/usr/share/doc/python-all-dev:
+	(sudo apt-get install python-all-dev)
 
 ideb:
 	(sudo dpkg -i deb_dist/*.deb)
