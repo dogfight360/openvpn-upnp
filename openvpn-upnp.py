@@ -6,6 +6,11 @@ import getopt
 
 from time import sleep
 
+# Forward port
+PORT = 1194
+# refresh UPNP each 10 mins
+REFRESH_TIME = 10 * 60
+
 def usage():
   print '''
 Usage: %s [--start] [--stop] [--show]
@@ -62,15 +67,15 @@ def run():
     except:
       pass
     start()
-    sleep(10 * 60) # each 10 min
+    sleep(REFRESH_TIME) # each 10 min
 
 def start():
   u = init()
-  print u.addportmapping(1194, 'TCP', u.lanaddr, 1194, 'OpenVPN-UPNP plugin', '')
+  print u.addportmapping(PORT, 'TCP', u.lanaddr, PORT, 'OpenVPN-UPNP plugin', '')
 
 def stop():
   u = init()
-  print u.deleteportmapping(1194, 'TCP')
+  print u.deleteportmapping(PORT, 'TCP')
 
 def main():
   action = args()
