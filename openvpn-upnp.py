@@ -66,7 +66,10 @@ def run():
       stop()
     except:
       pass
-    start()
+    try:
+      start()
+    except:
+      pass
     sleep(REFRESH_TIME) # each 10 min
 
 def start():
