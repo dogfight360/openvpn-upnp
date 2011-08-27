@@ -8,8 +8,8 @@ from time import sleep
 
 # Forward port
 PORT = 1194
-# refresh UPNP each 10 mins
-REFRESH_TIME = 10 * 60
+# refresh UPNP each 1 min
+REFRESH_TIME = 1 * 60
 
 def usage():
   print '''
