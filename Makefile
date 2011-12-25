@@ -1,4 +1,8 @@
+VERSION=$(shell perl -lne 'm|version=.(\d\.\d\.\d)|g && print $$1' setup.py)
+
 all: build
+
+clean: carchive
 
 build: miniupnpc
 
@@ -36,3 +40,14 @@ irpm:
 
 /usr/bin/rpmbuild:
 	(sudo yum install -y rpmdevtools)
+
+archive:
+	mkdir openvpn-upnp-${VERSION}
+	cp -r src openvpn-upnp-${VERSION}/
+	cp Makefile setup.py openvpn-upnp-${VERSION}/
+	mkdir openvpn-upnp-${VERSION}/miniupnpc
+	cp -r miniupnpc/* openvpn-upnp-${VERSION}/miniupnpc/
+	tar -czvf openvpn-upnp-${VERSION}.tgz openvpn-upnp-${VERSION}/
+
+carchive:
+	rm -rf openvpn-upnp-${VERSION}
