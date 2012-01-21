@@ -10,7 +10,7 @@ build: miniupnpc
 
 deb: /usr/share/pyshared/stdeb build
 	(python setup.py --command-packages=stdeb.command bdist_deb)
-	(cd ../miniupnp/miniupnpc; python setup.py --command-packages=stdeb.command bdist_deb)
+	(cd ../miniupnp/miniupnpc && python setup.py --command-packages=stdeb.command bdist_deb)
 
 /usr/share/pyshared/stdeb: /usr/share/doc/python-all-dev
 	(sudo apt-get install python-stdeb)
@@ -20,7 +20,7 @@ deb: /usr/share/pyshared/stdeb build
 
 ideb:
 	(sudo dpkg -i deb_dist/*.deb)
-	(sudo dpkg -i ../miniupnp/miniupnpc/deb_dist/*.deb)
+	(make -C ../miniupnp/miniupnpc ideb)
 
 .PHONY: miniupnpc
 
@@ -31,8 +31,8 @@ miniupnpc:
 .PHONY: rpm
 
 rpm: /usr/bin/rpmbuild build
-	(mkdir -p rpm; python setup.py bdist_rpm --dist-dir=rpm)
-	(cd ../miniupnp/miniupnpc; mkdir -p rpm; python setup.py bdist_rpm --dist-dir=rpm)
+	(mkdir -p rpm && python setup.py bdist_rpm --dist-dir=rpm)
+	(cd ../miniupnp/miniupnpc && mkdir -p rpm && python setup.py bdist_rpm --dist-dir=rpm)
 
 irpm:
 	(sudo rpm -U --force rpm/*.noarch.rpm)
