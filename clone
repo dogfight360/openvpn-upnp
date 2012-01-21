@@ -1,5 +1,5 @@
 #!/bin/bash
 
 if [ ! -d ../miniupnp ]; then
-  (cd ../; git clone https://github.com/miniupnp/miniupnp || exit 1)
+  (cd ../ && git clone https://github.com/miniupnp/miniupnp || exit 1)
 fi
