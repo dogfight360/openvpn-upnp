@@ -12,7 +12,7 @@
 #
 # clone.sh - clone.sh script
 #
-# . [path_to]/git-submodule-clone
+# . $(dirname $0)/functions/git-submodule-clone
 #
 # git_submodule_clone https://github.com/miniupnp/miniupnp
 # git_submodule_clone https://github.com/miniupnp/miniupnp miniupnp_local_dir
