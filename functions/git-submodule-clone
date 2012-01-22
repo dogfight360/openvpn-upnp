@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# this function used to replace git-submodule function calls
+# also with submodule functionality.
+# submodules has a lot of restrictions and i prefer to clone full tree
+# instead of creating a link to commit (which submodule does)
+#
+# 1) submodule can be stick only to commit
+# 2) submodule require additional action after clone like git submoule init
+#
+# to use this sciript write:
+#
+# clone.sh - clone.sh script
+#
+# . [path_to]/git-submodule-clone
+#
+# git_submodule_clone https://github.com/miniupnp/miniupnp
+# git_submodule_clone https://github.com/miniupnp/miniupnp miniupnp_local_dir
+# git_submodule_clone https://github.com/miniupnp/miniupnp miniupnpn_local2_dir branch_name
+# git_submodule_branch https://github.com/miniupnp/miniupnp master
+#
+
+git_submodule_clone() {
+  URL=$1
+  DIR=$2
+  BRANCH=$3
+  
+  if [ -z "$DIR" ]; then
+    DIR=$(basename $URL)
+    DIR=${DIR%.git}
+  fi
+
+  if [ ! -z "$BRANCH" ]; then
+    BRANCH="-b $BRANCH"
+  fi
+  
+  if [ ! -d ../$DIR ]; then
+    (cd ../ && git clone $BRANCH $URL $DIR || exit 1)
+  else
+    (cd ../$DIR && echo $DIR && git status || exit 1)
+  fi
+}
+
+git_submodule_branch() {
+  URL=$1
+  BRANCH=$2
+  
+  if [ ! -d ../$BRANCH ]; then
+    (cd ../ && git clone -b $BRANCH $URL $BRANCH || exit 1)
+  else
+    (cd ../$BRANCH && echo $BRANCH && git status || exit 1)
+  fi
+}

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DIR=$(dirname $0)
+
+cd $DIR || exit 1
+
+git fetch home-bin || exit 1
+
+for F in *; do
+  git show home-bin/common-functions:$F > $F || exit 1
+done
+
+git commit -m "merge common-functions with last version" . || exit 1
