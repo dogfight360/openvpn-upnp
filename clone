@@ -1,5 +1,25 @@
 #!/bin/bash
 
-if [ ! -d ../miniupnp ]; then
-  (cd ../ && git clone https://github.com/miniupnp/miniupnp || exit 1)
-fi
+repo() {
+  URL=$1
+  DIR=$2
+  BRANCH=$3
+  
+  if [ -z "$DIR" ]; then
+    DIR=$(basename $URL)
+    DIR=${DIR%.git}
+  fi
+
+  if [ ! -z "$BRANCH" ]; then
+    BRANCH="-b $BRANCH"
+  fi
+  
+  if [ ! -d ../$DIR ]; then
+    (cd ../ && git clone $BRANCH $URL $DIR || exit 1)
+  else
+    (cd ../$DIR && echo $DIR && git status)
+  fi
+}
+
+repo https://github.com/miniupnp/miniupnp
+
