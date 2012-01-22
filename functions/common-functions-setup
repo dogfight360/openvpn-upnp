@@ -1,15 +1,22 @@
 #!/bin/bash
 
-FUNC=$1
+common_checkout() {
+  BRANCH=$1
+  FUNC=$2
 
-func() {
-  git show home-bin/common-functions:$FUNC > $FUNC || exit 1
+  git show $BRANCH:$FUNC > $FUNC || exit 1
 }
 
-if [ -z "$FUNC" ]; then
-  git remote add home-bin https://github.com/axet/home-bin.git || exit 1
-  git fetch home-bin || exit 1
-  func common-functions-merge || exit 1
-else
-  func $FUNC || exit 1
+NAME=$(basename $0)
+
+if [ "$NAME" == "common-functions-setup" ]; then
+  FUNC=$1
+
+  if [ -z "$FUNC" ]; then
+    git remote add home-bin https://github.com/axet/home-bin.git || exit 1
+    git fetch home-bin || exit 1
+    common_checkout home-bin/common-functions common-functions-merge || exit 1
+  else
+    common_checkout home-bin/common-functions $FUNC || exit 1
+  fi
 fi

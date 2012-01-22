@@ -1,13 +1,36 @@
 #!/bin/bash
 
-DIR=$(dirname $0)
+. $(dirname $0)/common-functions-setup
 
-cd $DIR || exit 1
+# it must be a function, since bash realod changed scripts
+# and restart if from current point update procress may fail
+# without a function.
+#
+# http://stackoverflow.com/questions/4754592
+#
+common_functions_merge() {
+  # we have '*' in script, change dir first
+  cd $(dirname $0) || exit 1
 
-git fetch home-bin || exit 1
+  CHANGES=$(git status --porcelain .)
+  if [ ! -z "$CHANGES" ]; then
+    echo "we cant operatate on modified tree"
+    exit 1
+  fi
 
-for F in *; do
-  git show home-bin/common-functions:$F > $F || exit 1
-done
+  git fetch home-bin || exit 1
 
-git commit -m "merge common-functions with last version" . || exit 1
+  # since '*', be sure we are on dirname $0 directory
+  for F in *; do
+    common_checkout home-bin/common-functions $F || exit 1
+  done
+
+  CHANGES=$(git status --porcelain .)
+  if [ ! -z "$CHANGES" ]; then
+    git commit -m "merge common-functions with last version" . || exit 1
+  fi
+}
+
+# since this file contatins only all real call
+# if script will be restated it just fire to call this function twice
+common_functions_merge
