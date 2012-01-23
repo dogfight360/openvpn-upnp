@@ -3,11 +3,18 @@
 import os
 import sys
 import subprocess
-import popen2
 
 def os_exec(run):
-  (pout, pin, perr) = popen2.popen3(run)
-  return pout.read()
+  p = subprocess.Popen(run, shell=True, bufsize=1024, stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+
+  body = p.stdout.read()
+  
+  code = p.wait()
+  if code != 0:
+    raise subprocess.CalledProcessError(code, run, p.stderr.read())
+
+  return body
 
 def git_show(branch, file):
   run = "git show " + branch + ":" + file;
@@ -22,7 +29,7 @@ def git_fetch(origin):
   return os_exec(run);
 
 def git_status(path):
-  run = "git status --porcelain " + path;
+  run = "git status --porcelain -uno " + path;
   return os_exec(run);
 
 def git_ls_tree(branch):

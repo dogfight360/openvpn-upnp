@@ -17,8 +17,7 @@ def common_ignore(branch):
 def common_functions_merge(branch):
   changes = git_status(".")
   if changes:
-    print "we cant operatate on modified tree"
-    sys.exit(1)
+    raise Exception("we cant operatate on modified tree")
 
   ignore = common_ignore(branch)
   
