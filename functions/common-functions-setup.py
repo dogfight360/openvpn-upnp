@@ -1,4 +1,7 @@
 #!/usr/bin/python
+#
+# common-functions
+#
 
 import os
 import sys
@@ -12,7 +15,7 @@ def os_exec(run):
   
   code = p.wait()
   if code != 0:
-    raise subprocess.CalledProcessError(code, run, p.stderr.read())
+    raise subprocess.CalledProcessError(code, run)
 
   return body
 
@@ -63,11 +66,12 @@ def common_checkout(branch, func):
 def main(args):
   if len(sys.argv) == 2:
     func = args[1]
-    common_checkout("home-bin/common-functions", func)
+    common_checkout("functions-bin/master", func)
   else:
-    git_remote_add("home-bin", "https://github.com/axet/home-bin.git")
-    git_fetch("home-bin")
-    common_checkout("home-bin/common-functions", "common-functions-merge.py")
+    git_remote_add("functions-bin", "https://github.com/axet/functions-bin.git")
+    git_fetch("functions-bin")
+    common_checkout("functions-bin/master", "common-functions-setup.py")
+    common_checkout("functions-bin/master", "common-functions-merge.py")
 
 if __name__ == "__main__":
   main(sys.argv)

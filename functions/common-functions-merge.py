@@ -1,4 +1,7 @@
 #!/usr/bin/python
+#
+# common-functions
+#
 
 import os
 
@@ -29,7 +32,7 @@ def common_functions_merge(branch):
 
   changes = git_status(".")
   if changes:
-    git_commit("merge common-functions with last version", ".")
+    git_commit("merge " + branch + " with last version", ".")
 
 def main(args):
   os.chdir(os.path.dirname(os.path.abspath(__file__)))
